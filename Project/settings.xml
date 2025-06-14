@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <BasketNovel>
-	<Settings Width="1280" Height="720" NovelTitle="MyWorld" InitialScript="title.txt" MsgboxScript="system\sys_msg.txt" ApplicationSize="Window" UseCompressedRes="true" EditorStringFile="Strings_editor.xml" CommandFile="Commands.xml" SyntaxFile="Syntax_core.xshd" disableDebugLog="False" Icon="" sysProjectFolder="MyWorld" sysMemoryManagementType="2" writeDirectoryType="0" displayFPS="true" lang="eng" logDuringSkip="" AppUserResizePolicy="" WindowSizeAdjustable="false" WindowBorderless="false" copy_dialogue_to_clipboard="false" disallowOpen="false" disallowPopups="false" FixedUpdateMethod="0" cap_update_dt_to_fixed_update_dt="false" WindowSizeAllowFreeRatio="" TextAutoWaitMethodDefault="2" Version="16.7.1" displayRAM="true" memory_auto_release_display_error="true" />
+	<Settings Width="1280" Height="720" NovelTitle="MyWorld" InitialScript="scene.txt" MsgboxScript="system\sys_msg.txt" ApplicationSize="Window" UseCompressedRes="true" EditorStringFile="Strings_editor.xml" CommandFile="Commands.xml" SyntaxFile="Syntax_core.xshd" disableDebugLog="False" Icon="" sysProjectFolder="MyWorld" sysMemoryManagementType="2" writeDirectoryType="0" displayFPS="true" lang="eng" logDuringSkip="" AppUserResizePolicy="" WindowSizeAdjustable="false" WindowBorderless="false" copy_dialogue_to_clipboard="false" disallowOpen="false" disallowPopups="false" FixedUpdateMethod="0" cap_update_dt_to_fixed_update_dt="false" WindowSizeAllowFreeRatio="" TextAutoWaitMethodDefault="2" Version="16.7.1" displayRAM="true" memory_auto_release_display_error="true" />
 	<GameSettings vn_sysTextSkipMethod="0" vn_sysWindowMode="1" vn_sysVoicePlayType="1" vn_win_width="1280" vn_win_height="720">
 		<vnvar name="vn_sysSfxVolumeOn" range="4" created_at="">
 			<value type="46" literal="true" number="7.7924982015159809e-312" />
@@ -36,16 +36,16 @@
 			<value type="4" literal="" number="4500" />
 		</vnvar>
 		<vnvar name="vn_sysTextSkipOn" range="4" created_at="">
-			<value type="47" literal="false" number="8.2970035426742148e-312" />
+			<value type="47" literal="false" number="1.5342029568678919e-311" />
 		</vnvar>
 		<vnvar name="vn_sysTextReadVersion" range="4" created_at="">
 			<value type="4" literal="" number="0" />
 		</vnvar>
 		<vnvar name="vn_sysTextAutoOn" range="4" created_at="">
-			<value type="47" literal="false" number="8.2970035426742148e-312" />
+			<value type="47" literal="false" number="1.5342029568678919e-311" />
 		</vnvar>
 		<vnvar name="vn_sysTextNormalForce" range="4" created_at="">
-			<value type="47" literal="false" number="8.2970035426742148e-312" />
+			<value type="47" literal="false" number="1.5342029568678919e-311" />
 		</vnvar>
 	</GameSettings>
 </BasketNovel>

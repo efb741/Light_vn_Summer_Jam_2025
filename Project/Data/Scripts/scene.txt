@@ -1,0 +1,9 @@
+~bg0 id0 BG_01.png | .fadein id0 300
+
+script /Plugins/lvui/_system/macros.txt // macros
+
+~textbox_bottom
+
+"This is my project!
+
+~cg0 id1 Extra_Ending_Slot_01.png 310 125 80 | zoom id1 100% | .fadein id1 300
