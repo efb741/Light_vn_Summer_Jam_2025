@@ -1,0 +1,82 @@
+
+// freeOnReturnToMain: we want this screenspace to auto release on load.
+// tied to /Plugins/lvui/_system/events.txt [script_fin_return_to_main]
+screenSpaceStart my_config freeOnReturnToMain // placing this here s.t. we can test play this script
+
+//---------------------------------------------------------------
+// Case: when coming from another Config page
+
+bookmark config_in
+
+screenSpaceOverwrite my_config_voice
+
+script /Plugins/lvui/_system/config-pages.txt config_change
+
+//---------------------------------------------------------------
+// screen header + background
+
+bookmark config_btns
+
+autoOnCamera true
+
+cg syscheader_config /Plugins/lvui/sys2/Common_PopupBg2.png 0 0 703
+cg syscheader_config_title /Plugins/lvui/sys2/Config_Title.png 966 23 704
+
+touchableRes /Plugins/lvui/sys2/Common_Btn_Exit_01.png /Plugins/lvui/sys2/Common_Btn_Exit_02.png /Plugins/lvui/sys2/Common_Btn_Exit_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system46.ogg
+button syscheader_close 1201 10 705 jump config_out
+
+~touchableRes /Plugins/lvui/sys2/Config_Btn_System_01.png /Plugins/lvui/sys2/Config_Btn_System_02.png /Plugins/lvui/sys2/Config_Btn_System_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+~if (!lvSystem::IsFixedWindowSize()) button syscheader_btn0 447 10 705 jump /Plugins/lvui/_system/config-system.txt config_in
+~touchableRes /Plugins/lvui/sys2/Config_Btn_Text_01.png /Plugins/lvui/sys2/Config_Btn_Text_02.png /Plugins/lvui/sys2/Config_Btn_Text_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+~button syscheader_btn1 526 10 705 jump /Plugins/lvui/_system/config-text.txt config_in
+~touchableRes /Plugins/lvui/sys2/Config_Btn_Sound_01.png /Plugins/lvui/sys2/Config_Btn_Sound_02.png /Plugins/lvui/sys2/Config_Btn_Sound_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+~button syscheader_btn2 603 10 705 jump /Plugins/lvui/_system/config-sound.txt config_in
+~touchableRes /Plugins/lvui/sys2/Config_Btn_Voice_Selected.png /Plugins/lvui/sys2/Config_Btn_Voice_Selected.png /Plugins/lvui/sys2/Config_Btn_Voice_Selected.png
+~button syscheader_btn3 680 10 705
+~touchableRes /Plugins/lvui/sys2/Config_Btn_Info_01.png /Plugins/lvui/sys2/Config_Btn_Info_02.png /Plugins/lvui/sys2/Config_Btn_Info_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+~button syscheader_btn4 759 10 705 jump /Plugins/lvui/_system/config-info.txt config_in
+
+//---------------------------------------------------------------
+
+~cg0 sysc_textVoiceLIght_line /Plugins/lvui/sys2/Config_Voice_Frame_01.png 384 125 706
+
+~text0 sysc_t_textVoiceLight 725 200 707 /Plugins/lvui/res/NotoSansCJKjp-Regular.otf 30 middle "Ace"
+textShadow sysc_t_textVoiceLight 0
+textColour sysc_t_textVoiceLight 0 0 0
+
+// we add test files that run when trackbar changes
+
+~if (gvoice_ace == undefined) ~globalvar gvoice_ace = 30
+touchableRes /Plugins/lvui/sys2/Config_Common_Scroll_Btn_01.png /Plugins/lvui/sys2/Config_Common_Scroll_Btn_02.png /Plugins/lvui/sys2/Config_Common_Scroll_Btn_03.png /Plugins/lvui/res/se_maoudamashii_system47.ogg
+trackbar0 sysc_tr_TextVoiceLight 463 285 707 horizontal 350 gvoice_ace 0 100 script /Plugins/lvui/_system/config-voice.txt voice_ace_set_complete
+
+.fadein sysc_.* 100
+
+~keyDown r.click jump config_out
+
+// prevent script from reading past this line
+// (due to ex. command: continueRead)
+wait preventContinueRead
+
+//---------------------------------------------------------------
+bookmark voice_ace_set_complete
+
+~if (gvoice_ace == undefined) globalvar gvoice_ace = 30
+
+// noBacklogAddition: since we don't need this voice added to the backlog
+voice sysc_voice_test /Plugins/lvui/res/dog-howling-yapping-daniel_simon.ogg gvoice_ace noBacklogAddition
+
+saveGlobalVars
+
+script_fin
+
+//---------------------------------------------------------------
+bookmark config_out
+{
+    script /Plugins/lvui/_system/config-pages.txt config_out
+
+    screenSpaceFin my_config_voice
+}
+script_fin
+
+

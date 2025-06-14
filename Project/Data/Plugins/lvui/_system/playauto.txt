@@ -1,0 +1,18 @@
+
+// -------------------------------------------------------------------------------
+// For people that want to make video versions of their game
+// Usage: script /Plugins/lvui/_system/playauto.txt start
+// Warning: need to start testplay before the above script command for
+// this to work in the editor!
+
+栞 start
+{
+    systemvar vn_sysAutoSpeed = 80
+    systemvar vn_sysAutoWait = 4500
+    
+    textReadAuto true
+}
+script_fin
+
+// -------------------------------------------------------------------------------
+

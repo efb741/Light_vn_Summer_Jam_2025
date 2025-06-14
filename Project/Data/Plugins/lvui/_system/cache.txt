@@ -1,0 +1,4 @@
+
+// resource cache
+
+script /Plugins/lvui/_system/textbox.txt cache

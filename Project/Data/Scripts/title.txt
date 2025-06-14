@@ -1,0 +1,16 @@
+
+script /Plugins/lvui/_system/events.txt register
+script /Plugins/lvui/_system/menu.txt
+script /Plugins/lvui/_system/macros.txt
+
+~bg0 my_bg BG_01.png | .fadein my_bg 600 a3
+
+~textbox_bottom
+~【？？？】
+
+"This is my project!
+
+~cg0 my_scg Extra_Ending_Slot_01.png 510 125 80 | .fadein my_scg 600 a3
+
+"Yes, from here!
+

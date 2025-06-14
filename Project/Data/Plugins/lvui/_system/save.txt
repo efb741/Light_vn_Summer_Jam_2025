@@ -1,0 +1,289 @@
+//------------------------------------------------------
+// settings to allow testplay from this script
+
+script /Plugins/lvui/_system/events.txt register
+
+//------------------------------------------------------
+clear
+
+bookmark display
+
+// freeOnReturnToMain: we want this screenspace to auto release on load.
+// tied to /Plugins/lvui/_system/events.txt [script_fin_return_to_main]
+screenSpaceStart my_saveload freeOnReturnToMain
+
+script current set_basic_properties
+
+//------------------------------------------------------
+bookmark display_header
+
+screenSpaceOverwrite my_saveload_save
+
+touchFilterRange 1 
+
+// make sure key input isn't allowed during visual effect transitions
+inputLock true
+
+// sameLevelScreenSpaces: fadeout objects from either save/load
+.fadeout sys_save_.* 300 sameLevelScreenSpaces
+
+autoOnCamera true
+
+cg sysheader_save_title /Plugins/lvui/sys2/Save_Title.png 966 23 304
+touchableRes /Plugins/lvui/sys2/Common_Btn_Exit_01.png /Plugins/lvui/sys2/Common_Btn_Exit_02.png /Plugins/lvui/sys2/Common_Btn_Exit_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system46.ogg
+button sysheader_save_btn_close 1201 10 305 jump exit
+
+touchableRes /Plugins/lvui/sys2/Save_Btn_Save_Selected.png /Plugins/lvui/sys2/Save_Btn_Save_Selected.png /Plugins/lvui/sys2/Save_Btn_Save_Selected.png
+button sysheader_save_btn_tosave 565 10 305 //jump /Plugins/lvui/_system/save.txt display_header
+
+touchableRes /Plugins/lvui/sys2/Save_Btn_Load_01.png /Plugins/lvui/sys2/Save_Btn_Load_02.png /Plugins/lvui/sys2/Save_Btn_Load_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+button sysheader_save_btn_toload 642 10 305 jump /Plugins/lvui/_system/load.txt display_header
+
+bookmark display_fadein
+var in_time = 300
+jump display_content
+
+bookmark display_immediate
+var in_time = 0
+inputLock true
+allowRender false // stop rendering until everything's ready
+jump display_content
+
+//------------------------------------------------------
+bookmark display_content
+
+// calculate slot numbers for the current page
+temp_globalvar slot_start = (slot_page_current * slots_per_page)
+temp_globalvar slot1 = (slot_start + 1)
+temp_globalvar slot2 = (slot_start + 2)
+temp_globalvar slot3 = (slot_start + 3)
+temp_globalvar slot4 = (slot_start + 4)
+temp_globalvar slot5 = (slot_start + 5)
+temp_globalvar slot6 = (slot_start + 6)
+
+// slot boxes (case: data does exist)
+touchableRes /Plugins/lvui/sys2/Save_Slot_Frame_01.png /Plugins/lvui/sys2/Save_Slot_Frame_02.png /Plugins/lvui/sys2/Save_Slot_Frame_03.png /Plugins/lvui/res/se_maoudamashii_system47.ogg /Plugins/lvui/res/se_maoudamashii_system48.ogg
+button0 sys_save_on_1_frame 79 116 305 script current save_start (slot1)
+button0 sys_save_on_2_frame 643 116 305 script current save_start (slot2)
+button0 sys_save_on_3_frame 79 282 305 script current save_start (slot3)
+button0 sys_save_on_4_frame 643 282 305 script current save_start (slot4)
+button0 sys_save_on_5_frame 79 447 305 script current save_start (slot5)
+button0 sys_save_on_6_frame 643 447 305 script current save_start (slot6)
+
+// slot boxes (case: data doesn't exist)
+touchableRes /Plugins/lvui/sys2/Save_Slot_Frame_Nodata.png /Plugins/lvui/sys2/Save_Slot_Frame_Nodata_2.png /Plugins/lvui/sys2/Save_Slot_Frame_Nodata_3.png /Plugins/lvui/res/se_maoudamashii_system47.ogg /Plugins/lvui/res/se_maoudamashii_system48.ogg
+button0 sys_save_no_1_frame 79 116 305 script current save_start (slot1)
+button0 sys_save_no_2_frame 643 116 305 script current save_start (slot2)
+button0 sys_save_no_3_frame 79 282 305 script current save_start (slot3)
+button0 sys_save_no_4_frame 643 282 305 script current save_start (slot4)
+button0 sys_save_no_5_frame 79 447 305 script current save_start (slot5)
+button0 sys_save_no_6_frame 643 447 305 script current save_start (slot6)
+
+script current create_common
+
+//------------------------------------------------------
+bookmark display_footer
+
+// visual effects
+.fadein sys_save_.* (in_time)
+fadeout sys_save_page.* 0
+
+// create page scroll buttons
+// note: we could use [forRun] above as well, but leaving as-is for simplicity to help newcomers
+forRun 1 10 "script current create_page_scroll_buttons {}"
+
+// key bindings
+keyDown r.click jump exit
+keyDown wheel.down jump page_next
+keyDown wheel.up jump page_pre
+
+// restore normal settings as we've done all needed.
+inputLock false
+allowRender true
+
+// after we save (on button click): we need to refresh the buttons
+// hence [wait buttonSelect]
+wait buttonSelect sys
+jump display_immediate
+
+//------------------------------------------------------
+bookmark exit
+{
+    .fadeout sys_save_.*, savepage_str 300
+    fadeout menu_page.* 300
+    .fadeout .*save.* 300 allScreenSpaces 
+    
+    screenSpaceFin my_saveload_save
+}
+script_fin
+
+//------------------------------------------------------
+// page scroll logic
+bookmark page_next
+{
+    soundEffect sys_page_refresh /Plugins/lvui/res/se_maoudamashii_system29.ogg
+    datavar slot_page_current = ( (slot_page_current + 1) % slots_page_max )
+    jump display_immediate
+}
+script_fin
+
+bookmark page_pre
+{
+    soundEffect sys_page_refresh /Plugins/lvui/res/se_maoudamashii_system29.ogg
+    datavar slot_page_current -= 1
+    if ( slot_page_current < 0 ) datavar slot_page_current = (slots_page_max - 1)
+    jump display_immediate
+}
+script_fin
+
+//------------------------------------------------------
+bookmark save_start _slot
+{
+    // case: no data. save.
+    if (!lvSaveExists(_slot)) jump save_execute (_slot)
+    
+    // case: data exists. confirm overwrite
+    dialog "Overwrite the data?" script current save_execute (_slot)
+}
+script_fin
+
+bookmark save_execute _slot_confirmed
+{
+    save (_slot_confirmed) 245 142
+}
+script_fin
+
+//------------------------------------------------------
+bookmark data_delete _slot
+{
+    // case: no data. do nothing
+    if (!lvSaveExists(_slot)) script_fin
+    
+    // case: data exists. delete.
+    dialog "Delete the data?" savedelete (_slot)
+}
+script_fin
+
+//------------------------------------------------------
+//------------[  save, load common settings ]----------
+//------------------------------------------------------
+
+bookmark set_save_settings
+{
+    // register logic for after load
+    script /Plugins/lvui/_system/events.txt register
+    
+    // set objects with name starting [sys] to not save 
+    noSaveRange sys.*
+    
+    // set objects with name starting [sys] to not appear in the save screenshot 
+    noSaveSSRange sys.*
+}
+script_fin
+
+//------------------------------------------------------
+bookmark set_basic_properties
+{
+    script current set_save_settings
+
+    // screen layout variables
+    datavar slots_per_page = 6
+    datavar slots_page_max = 10
+    if (slot_page_current == undefined) datavar slot_page_current = 0
+    
+    // set date format
+    temp_globalvar vn_save_time_format = "%Y/%m/%d   %H:%M:%S"
+    
+    cg0 sysheader_save /Plugins/lvui/sys2/Common_PopupBg.png 0 0 303 on_camera | .fadein sysheader_save 300
+}
+script_fin
+
+//------------------------------------------------------
+bookmark create_common
+{
+    autoOnCamera true
+
+    // delete buttons
+    touchableRes /Plugins/lvui/sys2/Save_Slot_Btn_Delete_01.png /Plugins/lvui/sys2/Save_Slot_Btn_Delete_02.png /Plugins/lvui/sys2/Save_Slot_Btn_Delete_03.png
+    button0 sys_save_on_1_delete 589 130 306 script /Plugins/lvui/_system/save.txt data_delete (slot1)
+    button0 sys_save_on_2_delete 1153 130 306 script /Plugins/lvui/_system/save.txt data_delete (slot2)
+    button0 sys_save_on_3_delete 589 296 306 script /Plugins/lvui/_system/save.txt data_delete (slot3)
+    button0 sys_save_on_4_delete 1153 296 306 script /Plugins/lvui/_system/save.txt data_delete (slot4)
+    button0 sys_save_on_5_delete 589 461 306 script /Plugins/lvui/_system/save.txt data_delete (slot5)
+    button0 sys_save_on_6_delete 1153 461 306 script /Plugins/lvui/_system/save.txt data_delete (slot6)
+    
+    // screenshots (if data exists)
+    if (lvSaveExists(slot1)) cg0 sys_save_on_1_image (lvSaveImagePath(slot1)) 116 127 306
+    if (lvSaveExists(slot2)) cg0 sys_save_on_2_image (lvSaveImagePath(slot2)) 680 127 306
+    if (lvSaveExists(slot3)) cg0 sys_save_on_3_image (lvSaveImagePath(slot3)) 116 293 306
+    if (lvSaveExists(slot4)) cg0 sys_save_on_4_image (lvSaveImagePath(slot4)) 680 293 306
+    if (lvSaveExists(slot5)) cg0 sys_save_on_5_image (lvSaveImagePath(slot5)) 116 458 306
+    if (lvSaveExists(slot6)) cg0 sys_save_on_6_image (lvSaveImagePath(slot6)) 680 458 306
+    
+    // date
+    ~text0 sys_save_on_1_info 375 137 306 /Plugins/lvui/res/texgyreheroscn-bold.otf 23 (lvSaveInfo(slot1, "date"))
+    ~text0 sys_save_on_2_info 940 137 306 /Plugins/lvui/res/texgyreheroscn-bold.otf 23 (lvSaveInfo(slot2, "date"))
+    ~text0 sys_save_on_3_info 375 303 306 /Plugins/lvui/res/texgyreheroscn-bold.otf 23 (lvSaveInfo(slot3, "date"))
+    ~text0 sys_save_on_4_info 940 303 306 /Plugins/lvui/res/texgyreheroscn-bold.otf 23 (lvSaveInfo(slot4, "date"))
+    ~text0 sys_save_on_5_info 375 468 306 /Plugins/lvui/res/texgyreheroscn-bold.otf 23 (lvSaveInfo(slot5, "date"))
+    ~text0 sys_save_on_6_info 940 468 306 /Plugins/lvui/res/texgyreheroscn-bold.otf 23 (lvSaveInfo(slot6, "date"))
+    
+    // dialogue text
+    // reason we use [textbox] and not [text]:
+    // s.t we can define the textbox width
+    ~textbox0 sys_save_on_1_infoStr 381 180 306 200 50 /Plugins/lvui/res/NotoSansCJKjp-Regular.otf 17 ignoreOverflow (lvSaveInfo(slot1, "text"))
+    ~textbox0 sys_save_on_2_infoStr 944 180 306 200 50 /Plugins/lvui/res/NotoSansCJKjp-Regular.otf 17 ignoreOverflow (lvSaveInfo(slot2, "text"))
+    ~textbox0 sys_save_on_3_infoStr 381 346 306 200 50 /Plugins/lvui/res/NotoSansCJKjp-Regular.otf 17 ignoreOverflow (lvSaveInfo(slot3, "text"))
+    ~textbox0 sys_save_on_4_infoStr 944 346 306 200 50 /Plugins/lvui/res/NotoSansCJKjp-Regular.otf 17 ignoreOverflow (lvSaveInfo(slot4, "text"))
+    ~textbox0 sys_save_on_5_infoStr 381 511 306 200 50 /Plugins/lvui/res/NotoSansCJKjp-Regular.otf 17 ignoreOverflow (lvSaveInfo(slot5, "text"))
+    ~textbox0 sys_save_on_6_infoStr 944 511 306 200 50 /Plugins/lvui/res/NotoSansCJKjp-Regular.otf 17 ignoreOverflow (lvSaveInfo(slot6, "text"))
+    
+    // slot numbers
+    ~text0 sys_save_1_num 102 183 306 /Plugins/lvui/res/texgyreheroscn-bold.otf 23 middle "{{ slot1 }}"
+    ~text0 sys_save_2_num 666 183 306 /Plugins/lvui/res/texgyreheroscn-bold.otf 23 middle "{{ slot2 }}"
+    ~text0 sys_save_3_num 102 352 306 /Plugins/lvui/res/texgyreheroscn-bold.otf 23 middle "{{ slot3 }}"
+    ~text0 sys_save_4_num 666 352 306 /Plugins/lvui/res/texgyreheroscn-bold.otf 23 middle "{{ slot4 }}"
+    ~text0 sys_save_5_num 102 518 306 /Plugins/lvui/res/texgyreheroscn-bold.otf 23 middle "{{ slot5 }}"
+    ~text0 sys_save_6_num 666 518 306 /Plugins/lvui/res/texgyreheroscn-bold.otf 23 middle "{{ slot6 }}"
+    
+    // decide appropriate slot box
+    if (!lvSaveExists(slot1)) fadeout .*save_on_1.* else fadeout .*save_no_1.*
+    if (!lvSaveExists(slot2)) fadeout .*save_on_2.* else fadeout .*save_no_2.*
+    if (!lvSaveExists(slot3)) fadeout .*save_on_3.* else fadeout .*save_no_3.*
+    if (!lvSaveExists(slot4)) fadeout .*save_on_4.* else fadeout .*save_no_4.*
+    if (!lvSaveExists(slot5)) fadeout .*save_on_5.* else fadeout .*save_no_5.*
+    if (!lvSaveExists(slot6)) fadeout .*save_on_6.* else fadeout .*save_no_6.*
+    
+    // text settings
+    ~textShadow sys_save_.*info.* 0
+    ~textBold sys_save_.*info.* false
+    ~textColour sys_save_.*info 16 192 208
+    ~textColour sys_save_.*infoStr 0 0 0
+    ~textShadow sys_save_.*num 0
+    ~textBold sys_save_.*num false
+    ~textColour sys_save_.*num 254 254 254
+}
+script_fin
+
+//------------------------------------------------------
+bookmark create_page_scroll_buttons _page_number
+{
+    // if single digit number: prefix with 0
+    if (_page_number < 10) var texture_id = "0{{_page_number}}"
+    else var texture_id = "{{_page_number}}"
+    
+    // page_number_internal: should start from 0 (same as slot_page_current)
+    var page_number_internal = (_page_number - 1)
+    var x = 354 + (58 * page_number_internal)
+    
+    // if current page: display as cg 
+    // else: create button
+    touchableRes "/Plugins/lvui/sys2/Save_Btn_Page_{{texture_id}}_01.png" "/Plugins/lvui/sys2/Save_Btn_Page_{{texture_id}}_02.png" "/Plugins/lvui/sys2/Save_Btn_Page_{{texture_id}}_02.png" /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+    if (slot_page_current == page_number_internal) cg sys_save_page_(texture_id) "/Plugins/lvui/sys2/Save_Btn_Page_{{texture_id}}_Selected.png" (x) 638 305 on_camera
+    else button sys_save_page_(texture_id) (x) 638 305 on_camera datavar slot_page_current = (page_number_internal)
+    
+    // note: with [wait buttonSelect sys] above (and in load.txt)
+    // if the button created here is clicked, we refresh the page.
+}
+script_fin
+

@@ -1,0 +1,174 @@
+
+bookmark menu_setup
+{
+    // setup backlog configuration
+    script /Plugins/lvui/_system/backlog.txt log_init
+    
+    script /Plugins/lvui/_system/events.txt register
+    
+    keyDown r.click script /Plugins/lvui/_system/menu.txt menu_show
+}
+script_fin
+
+~//---------------------------------------------------------------
+
+bookmark menu_show
+{
+    // freeOnReturnToMain: we want this screenspace to auto release on load.
+    // tied to /Plugins/lvui/_system/events.txt [script_fin_return_to_main]
+    screenSpaceStart my_menu freeOnReturnToMain
+    
+    // pauseLowerScripts: need to do this if ex.
+    // parallel scripts are running in lower parts of the script stack
+    pauseLowerScripts true
+    
+    // force normal text read s.t. visual effects execute at normal speed
+    textReadNormalForce true
+    
+    // pause everything except for the bgm
+    // (bgm has name: vn_sysBGM)
+    pause "(?!vn_sysBGM).*" allScreenSpaces
+    
+    // hide current dialogue textbox
+    script /Plugins/lvui/_system/textbox.txt txt_hide
+    
+    autoOnCamera true
+    
+    cg0 sysmenu /Plugins/lvui/sys2/Common_PopupBg.png 0 0 102
+    .fadein sysmenu 300
+    
+    cg0 sysmenu_ribbon /Plugins/lvui/sys2/Popup_Frame.png 0 327 103
+    .fadein sysmenu_ribbon 300
+    
+    // menu_displaying: used by /Plugins/lvn_message/sys_msg.txt
+    datavar menu_displaying = true
+    
+    // button settings
+    
+    touchableRes /Plugins/lvui/sys2/Popup_Btn_Backlog_01.png /Plugins/lvui/sys2/Popup_Btn_Backlog_02.png /Plugins/lvui/sys2/Popup_Btn_Backlog_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+    button0 sysmenu_button1 294 304 104 script /Plugins/lvui/_system/backlog.txt log_display
+    zoom sysmenu_button1 90%
+    
+    touchableRes /Plugins/lvui/sys2/Popup_Btn_Config_01.png /Plugins/lvui/sys2/Popup_Btn_Config_02.png /Plugins/lvui/sys2/Popup_Btn_Config_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+    button0 sysmenu_button4 643 304 104 script /Plugins/lvui/_system/config-system.txt config_in_first
+    zoom sysmenu_button4 90%
+    
+    touchableRes /Plugins/lvui/sys2/Popup_Btn_Return_01.png /Plugins/lvui/sys2/Popup_Btn_Return_02.png /Plugins/lvui/sys2/Popup_Btn_Return_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+    button0 sysmenu_button6 875 304 104 jump menu_out
+    zoom sysmenu_button6 90%
+    
+    if (g_scene_replay == true) jump menu_button_fadein
+    
+    bookmark menu_non_replay
+    
+    // buttons we don't want shown on scene replay
+    // reference: extra/replay.txt
+    
+    touchableRes /Plugins/lvui/sys2/Popup_Btn_Save_01.png /Plugins/lvui/sys2/Popup_Btn_Save_02.png /Plugins/lvui/sys2/Popup_Btn_Save_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+    button0 sysmenu_button2 410 304 104 script /Plugins/lvui/_system/save.txt display
+    zoom sysmenu_button2 90%
+    
+    touchableRes /Plugins/lvui/sys2/Popup_Btn_Load_01.png /Plugins/lvui/sys2/Popup_Btn_Load_02.png /Plugins/lvui/sys2/Popup_Btn_Load_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+    button0 sysmenu_button3 526 304 104 script /Plugins/lvui/_system/load.txt display
+    zoom sysmenu_button3 90%
+    
+    touchableRes /Plugins/lvui/sys2/Popup_Btn_Title_01.png /Plugins/lvui/sys2/Popup_Btn_Title_02.png /Plugins/lvui/sys2/Popup_Btn_Title_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+    button0 sysmenu_button5 759 304 104 dialog "Return to the title screen?" script /Plugins/lvui/_system/menu.txt to_title
+    zoom sysmenu_button5 90%
+    
+    bookmark menu_button_fadein
+    
+    //button entrance
+    zoom sysmenu_button1 100% 200
+    .fadein sysmenu_button1 40
+    
+    zoom sysmenu_button2 100% 200
+    .fadein sysmenu_button2 40
+    
+    zoom sysmenu_button3 100% 200
+    .fadein sysmenu_button3 40
+    
+    zoom sysmenu_button4 100% 200
+    .fadein sysmenu_button4 40
+    
+    zoom sysmenu_button5 100% 200
+    .fadein sysmenu_button5 40
+    
+    zoom sysmenu_button6 100% 200
+    .fadein sysmenu_button6 40
+    
+    bookmark menu_reappear
+    
+    textReadNormalForce true
+    keyDown r.click jump menu_out
+    
+    // prevent script from reading past this line
+    // (due to ex. command: continueRead)
+}
+wait preventContinueRead
+
+~//---------------------------------------------------------------
+
+bookmark menu_out
+{
+    // make sure key input isn't allowed during visual effect transitions
+    inputLock true
+    
+    // redisplay dialogue textbox
+    script /Plugins/lvui/_system/textbox.txt txt_show 
+    
+    // fadeout all objects from this screenspace
+    .fadeout all 300
+    
+    textReadNormalForce false
+    
+    bookmark menu_out_end
+    
+    datavar menu_displaying = false
+    
+    // resume all paused objects from above
+    play "(?!vn_sysBGM).*" allScreenSpaces
+    
+    // continue key input
+    inputLock false
+    
+    pauseLowerScripts false
+    
+    screenSpaceFin my_menu
+}
+script_fin
+
+~//---------------------------------------------------------------
+bookmark to_title
+{
+    // make sure key input isn't allowed during visual effect transitions
+    inputLock true
+    
+    fadeout bgm, soundEffect, voice 800
+    
+    // for a smooth fadeout transition, we place a black texture on top and fade it in
+    ~cg0 fadeout_black /Plugins/lvui/res/black_full_1280.png 0 0 2000 on_camera | .fadein fadeout_black 800
+    
+    wait 1000
+    
+    // make sure we still display black after fading out the black cg above
+    clearRGB 0 0 0
+    
+    // clear: reset multiple settings
+    // use on scene changes
+    clear allScreenSpaces
+    
+    // continue key input
+    inputLock false
+    
+    finaljump title.txt
+}
+script_fin
+
+~//---------------------------------------------------------------
+bookmark text_skip
+{
+    
+}
+script_fin
+

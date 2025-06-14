@@ -1,0 +1,73 @@
+
+bookmark register
+{
+    setDialogScript /Plugins/lvui/_dialog/script.txt
+
+    // logic after load
+    event load after script /Plugins/lvui/_system/events.txt load_after
+    
+    // logic after rollback
+    event rollback after script /Plugins/lvui/_system/events.txt rollback_after
+    
+    // logic after close_signal (ex. clicking the window [x] button)
+    event close_signal after dialog "Close the game?" endGame
+    
+    // if disallowOpen is true (Settings.xml), the [open] button cannot be used.
+    // this is when the [disallow_open] signal fires.
+    event disallow_open after dialog "This environment does not support external processes"
+    
+    // if disallowPopups is true (Settings.xml), on error, etc. the [disallow_popups] fires.
+    event disallow_popups after dialog "Alert has occurred. Check the logs"
+}
+script_fin
+
+//----------------------------------------------------------------------
+// from ex. the save screen, return us back to the main scene
+
+bookmark load_after
+{
+    ~cg event_black /Plugins/lvui/res/black_full_1280.png 0 0 400 on_camera
+
+    // on load, the engine sets [allowRender false] (to allow ample time to do anything needed). switch it true here.
+    allowRender true
+    
+    wait 300
+    
+    // fadeout all system objects
+    // note: this is the reason we intentionally prefixed all objects in the menu, save screens, etc.
+    // with [sys]
+    fadeout sys.* allScreenSpaces
+    
+    // resume all objects
+    play "(?!vn_sysBGM).*" allScreenSpaces
+    
+    .fadeout event_black 300
+    
+    script /Plugins/lvui/_system/textbox.txt txt_show // reveal dialogue textbox
+    
+    // force us back to normal text read
+    textReadNormalForce false
+    
+    // on load, the engine sets [inputLock true] (to allow ample time to do anything needed). switch it true here.
+    inputLock false
+    
+    // pop script stack until we return to parser 0
+}
+script_fin_return_to_main
+
+//----------------------------------------------------------------------
+
+栞 rollback_after
+{
+    allowRender true
+    
+    // we add the [sys_] prefix to the object name to make sure it doesn't get saved.
+    // reference: /Plugins/lvui/_system/save.txt set_save_settings
+    ~text0 sys_rollback_text 41 33 401 /Plugins/lvui/res/NotoSansCJKjp-Regular.otf 28 on_camera "Rollback Complete" | fadein sys_rollback_text 300
+    tweenListAdd sys_rollback_text 800 fadeout sys_rollback_text 300
+    
+    inputLock false
+}
+script_fin_return_to_main
+
+

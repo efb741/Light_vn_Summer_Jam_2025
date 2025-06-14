@@ -1,0 +1,152 @@
+//------------------------------------------------------
+// settings to allow testplay from this script
+
+script /Plugins/lvui/_system/events.txt register
+
+//------------------------------------------------------
+
+bookmark display
+
+// freeOnReturnToMain: we want this screenspace to auto release on load.
+// tied to /Plugins/lvui/_system/events.txt [script_fin_return_to_main]
+screenSpaceStart my_saveload freeOnReturnToMain
+
+script /Plugins/lvui/_system/save.txt set_basic_properties
+
+//------------------------------------------------------
+bookmark display_header
+
+screenSpaceOverwrite my_saveload_load
+
+touchFilterRange 1
+
+// make sure key input isn't allowed during visual effect transitions
+inputLock true
+
+// sameLevelScreenSpaces: fadeout objects from either save/load
+.fadeout sys_save_.* 300 sameLevelScreenSpaces
+
+autoOnCamera true
+
+cg sysheader_save_title /Plugins/lvui/sys2/Load_Title.png 966 23 304
+touchableRes /Plugins/lvui/sys2/Common_Btn_Exit_01.png /Plugins/lvui/sys2/Common_Btn_Exit_02.png /Plugins/lvui/sys2/Common_Btn_Exit_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system46.ogg
+button sysheader_save_btn_close 1201 10 305 jump exit
+
+// prevent buttons from displaying when opening from title
+touchableRes /Plugins/lvui/sys2/Save_Btn_Save_01.png /Plugins/lvui/sys2/Save_Btn_Save_02.png /Plugins/lvui/sys2/Save_Btn_Save_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+if ((is_title == false) || (is_title == undefined)) button sysheader_save_btn_tosave 565 10 305 jump /Plugins/lvui/_system/save.txt display_header
+
+touchableRes /Plugins/lvui/sys2/Save_Btn_Load_Selected.png /Plugins/lvui/sys2/Save_Btn_Load_Selected.png /Plugins/lvui/sys2/Save_Btn_Load_Selected.png
+if ((is_title == false) || (is_title == undefined)) button sysheader_save_btn_toload 642 10 305 //jump /Plugins/lvui/_system/save.txt display_header
+
+bookmark display_fadein
+var in_time = 300
+jump display_content
+
+bookmark display_immediate
+var in_time = 0
+inputLock true
+allowRender false // stop rendering until everything's ready
+jump display_content
+
+//------------------------------------------------------
+bookmark display_content
+.fadeout sys_save_.* 0
+
+// calculate slot numbers for the current page
+temp_globalvar slot_start = (slot_page_current * slots_per_page)
+temp_globalvar slot1 = (slot_start + 1)
+temp_globalvar slot2 = (slot_start + 2)
+temp_globalvar slot3 = (slot_start + 3)
+temp_globalvar slot4 = (slot_start + 4)
+temp_globalvar slot5 = (slot_start + 5)
+temp_globalvar slot6 = (slot_start + 6)
+
+// slot boxes (case: data does exist)
+touchableRes /Plugins/lvui/sys2/Save_Slot_Frame_01.png /Plugins/lvui/sys2/Save_Slot_Frame_02.png /Plugins/lvui/sys2/Save_Slot_Frame_03.png /Plugins/lvui/res/se_maoudamashii_system47.ogg /Plugins/lvui/res/se_maoudamashii_system48.ogg
+button0 sys_save_on_1_frame 79 116 305 script current load_start (slot1)
+button0 sys_save_on_2_frame 643 116 305 script current load_start (slot2)
+button0 sys_save_on_3_frame 79 282 305 script current load_start (slot3)
+button0 sys_save_on_4_frame 643 282 305 script current load_start (slot4)
+button0 sys_save_on_5_frame 79 447 305 script current load_start (slot5)
+button0 sys_save_on_6_frame 643 447 305 script current load_start (slot6)
+
+// slot boxes (case: data doesn't exist)
+// (just placeholder buttons that do nothing)
+touchableRes /Plugins/lvui/sys2/Save_Slot_Frame_Nodata.png /Plugins/lvui/sys2/Save_Slot_Frame_Nodata_2.png /Plugins/lvui/sys2/Save_Slot_Frame_Nodata_3.png /Plugins/lvui/res/se_maoudamashii_system47.ogg /Plugins/lvui/res/se_maoudamashii_system48.ogg
+button0 sys_save_no_1_frame 79 116 305
+button0 sys_save_no_2_frame 643 116 305
+button0 sys_save_no_3_frame 79 282 305
+button0 sys_save_no_4_frame 643 282 305
+button0 sys_save_no_5_frame 79 447 305
+button0 sys_save_no_6_frame 643 447 305
+
+script /Plugins/lvui/_system/save.txt create_common
+
+//------------------------------------------------------
+bookmark display_footer
+
+// visual effects
+.fadein sys_save_.* {{ in_time }}
+fadeout sys_save_page.* 0
+
+// create page scroll buttons
+// note: we could use [forRun] above as well, but leaving as-is for simplicity to help newcomers
+forRun 1 10 "script /Plugins/lvui/_system/save.txt create_page_scroll_buttons {}"
+
+// key bindings
+keyDown r.click jump exit
+keyDown wheel.down jump page_next
+keyDown wheel.up jump page_pre
+
+// restore normal settings as we've done all needed.
+inputLock false
+allowRender true
+
+// after we save (on button click): we need to refresh the buttons
+// hence [wait buttonSelect]
+wait buttonSelect sys
+jump display_immediate
+
+//------------------------------------------------------
+bookmark exit
+{
+    .fadeout sys_save_.*, savepage_str 300
+    fadeout menu_page.* 300
+    .fadeout .*save.* 300 allScreenSpaces 
+    
+    screenSpaceFin my_saveload_load
+}
+script_fin
+
+//------------------------------------------------------
+// page scroll logic
+
+bookmark page_next
+{
+    soundEffect sys_page_refresh /Plugins/lvui/res/se_maoudamashii_system29.ogg
+    datavar slot_page_current = ( (slot_page_current + 1) % slots_page_max )
+    jump display_immediate
+}
+script_fin
+
+bookmark page_pre
+{
+    soundEffect sys_page_refresh /Plugins/lvui/res/se_maoudamashii_system29.ogg
+    datavar slot_page_current -= 1
+    if ( slot_page_current < 0 ) datavar slot_page_current = (slots_page_max - 1)
+    jump display_immediate
+}
+script_fin
+
+//------------------------------------------------------
+bookmark load_start _slot
+{
+    // case: no data. do nothing.
+    if (!lvSaveExists(_slot)) script_fin
+    
+    // case: data exists. confirm load
+    dialog "Load the data?" load (_slot)
+}
+script_fin
+

@@ -1,0 +1,79 @@
+
+// freeOnReturnToMain: we want this screenspace to auto release on load.
+// tied to /Plugins/lvui/_system/events.txt [script_fin_return_to_main]
+screenSpaceStart my_config freeOnReturnToMain // placing this here s.t. we can test play this script
+
+//---------------------------------------------------------------
+// Case: when coming from another Config page
+
+bookmark config_in
+
+screenSpaceOverwrite my_config_info
+
+script /Plugins/lvui/_system/config-pages.txt config_change
+
+//---------------------------------------------------------------
+// screen header + background
+
+bookmark config_btns
+
+autoOnCamera true
+
+cg syscheader_config /Plugins/lvui/sys2/Common_PopupBg2.png 0 0 703
+cg syscheader_config_title /Plugins/lvui/sys2/Config_Title.png 966 23 704
+
+touchableRes /Plugins/lvui/sys2/Common_Btn_Exit_01.png /Plugins/lvui/sys2/Common_Btn_Exit_02.png /Plugins/lvui/sys2/Common_Btn_Exit_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system46.ogg
+button syscheader_close 1201 10 705 jump config_out
+
+~touchableRes /Plugins/lvui/sys2/Config_Btn_System_01.png /Plugins/lvui/sys2/Config_Btn_System_02.png /Plugins/lvui/sys2/Config_Btn_System_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+~if (!lvSystem::IsFixedWindowSize()) button syscheader_btn0 447 10 705 jump /Plugins/lvui/_system/config-system.txt config_in
+~touchableRes /Plugins/lvui/sys2/Config_Btn_Text_01.png /Plugins/lvui/sys2/Config_Btn_Text_02.png /Plugins/lvui/sys2/Config_Btn_Text_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+~button syscheader_btn1 526 10 705 jump /Plugins/lvui/_system/config-text.txt config_in
+~touchableRes /Plugins/lvui/sys2/Config_Btn_Sound_01.png /Plugins/lvui/sys2/Config_Btn_Sound_02.png /Plugins/lvui/sys2/Config_Btn_Sound_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+~button syscheader_btn2 603 10 705 jump /Plugins/lvui/_system/config-sound.txt config_in
+~touchableRes /Plugins/lvui/sys2/Config_Btn_Voice_01.png /Plugins/lvui/sys2/Config_Btn_Voice_02.png /Plugins/lvui/sys2/Config_Btn_Voice_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+~button syscheader_btn3 680 10 705 jump /Plugins/lvui/_system/config-voice.txt config_in
+~touchableRes /Plugins/lvui/sys2/Config_Btn_Info_Selected.png /Plugins/lvui/sys2/Config_Btn_Info_Selected.png /Plugins/lvui/sys2/Config_Btn_Info_Selected.png
+~button syscheader_btn4 759 10 705
+
+cg0 sysc_config_sysc_frame1 /Plugins/lvui/sys2/Config_Info_Frame_01.png 42 118 704
+cg0 sysc_config_sysc_frame2 /Plugins/lvui/sys2/Config_Info_Frame_02.png 0 483 704
+
+//---------------------------------------------------------------
+// links
+
+~touchableRes /Plugins/lvui/sys2/Config_Info_Btn_URL_01_01.png /Plugins/lvui/sys2/Config_Info_Btn_URL_01_02.png /Plugins/lvui/sys2/Config_Info_Btn_URL_01_03.png /Plugins/lvui/res/se_maoudamashii_system47.ogg /Plugins/lvui/res/se_maoudamashii_system48.ogg
+~button0 sysc_link0 70 615 705 open "http://twitter.com/lightvn_online"
+
+~touchableRes /Plugins/lvui/sys2/Config_Info_Btn_URL_02_01.png /Plugins/lvui/sys2/Config_Info_Btn_URL_02_02.png /Plugins/lvui/sys2/Config_Info_Btn_URL_02_03.png /Plugins/lvui/res/se_maoudamashii_system47.ogg /Plugins/lvui/res/se_maoudamashii_system48.ogg
+~button0 sysc_link1 70 647 705 open "http://lightvn.net"
+
+~touchableRes /Plugins/lvui/sys2/Config_Info_Btn_URL_04_01.png /Plugins/lvui/sys2/Config_Info_Btn_URL_04_02.png /Plugins/lvui/sys2/Config_Info_Btn_URL_04_03.png /Plugins/lvui/res/se_maoudamashii_system47.ogg /Plugins/lvui/res/se_maoudamashii_system48.ogg
+~button0 sysc_link2 404 615 705 open "http://soulengineproject.com"
+
+~touchableRes /Plugins/lvui/sys2/Config_Info_Btn_URL_03_01.png /Plugins/lvui/sys2/Config_Info_Btn_URL_03_02.png /Plugins/lvui/sys2/Config_Info_Btn_URL_03_03.png /Plugins/lvui/res/se_maoudamashii_system47.ogg /Plugins/lvui/res/se_maoudamashii_system48.ogg
+~button0 sysc_link3 404 647 705 open "http://twitter.com/soulengineproj"
+
+~touchableRes /Plugins/lvui/sys2/Config_Info_Btn_URL_05_01.png /Plugins/lvui/sys2/Config_Info_Btn_URL_05_02.png /Plugins/lvui/sys2/Config_Info_Btn_URL_05_03.png /Plugins/lvui/res/se_maoudamashii_system47.ogg /Plugins/lvui/res/se_maoudamashii_system48.ogg
+~button0 sysc_link4 718 615 705 open "http://twitter.com/daegon137"
+
+~touchableRes /Plugins/lvui/sys2/Config_Info_Btn_URL_06_01.png /Plugins/lvui/sys2/Config_Info_Btn_URL_06_02.png /Plugins/lvui/sys2/Config_Info_Btn_URL_06_03.png /Plugins/lvui/res/se_maoudamashii_system47.ogg /Plugins/lvui/res/se_maoudamashii_system48.ogg
+~button0 sysc_link5 999 615 705 open "http://twitter.com/mihaya1818"
+
+keyDown r.click jump config_out
+
+.fadein sysc_.* 300
+
+// prevent script from reading past this line
+// (due to ex. command: continueRead)
+wait preventContinueRead
+
+///////////////////////////////////////////////////////////////
+bookmark config_out
+{
+    script /Plugins/lvui/_system/config-pages.txt config_out
+
+    screenSpaceFin my_config_info
+}
+script_fin
+

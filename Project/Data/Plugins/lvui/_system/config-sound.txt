@@ -1,0 +1,80 @@
+
+// freeOnReturnToMain: we want this screenspace to auto release on load.
+// tied to /Plugins/lvui/_system/events.txt [script_fin_return_to_main]
+screenSpaceStart my_config freeOnReturnToMain // placing this here s.t. we can test play this script
+
+//---------------------------------------------------------------
+// Case: when coming from another Config page
+
+bookmark config_in
+
+screenSpaceOverwrite my_config_sound
+
+script /Plugins/lvui/_system/config-pages.txt config_change
+
+//---------------------------------------------------------------
+// screen header + background
+
+bookmark config_btns
+
+autoOnCamera true
+
+cg syscheader_config /Plugins/lvui/sys2/Common_PopupBg2.png 0 0 703
+cg syscheader_config_title /Plugins/lvui/sys2/Config_Title.png 966 23 704
+
+touchableRes /Plugins/lvui/sys2/Common_Btn_Exit_01.png /Plugins/lvui/sys2/Common_Btn_Exit_02.png /Plugins/lvui/sys2/Common_Btn_Exit_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system46.ogg
+button syscheader_close 1201 10 705 jump config_out
+
+~touchableRes /Plugins/lvui/sys2/Config_Btn_System_01.png /Plugins/lvui/sys2/Config_Btn_System_02.png /Plugins/lvui/sys2/Config_Btn_System_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+~if (!lvSystem::IsFixedWindowSize()) button syscheader_btn0 447 10 705 jump /Plugins/lvui/_system/config-system.txt config_in
+~touchableRes /Plugins/lvui/sys2/Config_Btn_Text_01.png /Plugins/lvui/sys2/Config_Btn_Text_02.png /Plugins/lvui/sys2/Config_Btn_Text_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+~button syscheader_btn1 526 10 705 jump /Plugins/lvui/_system/config-text.txt config_in
+~touchableRes /Plugins/lvui/sys2/Config_Btn_Sound_Selected.png /Plugins/lvui/sys2/Config_Btn_Sound_Selected.png /Plugins/lvui/sys2/Config_Btn_Sound_Selected.png
+~button syscheader_btn2 603 10 705
+~touchableRes /Plugins/lvui/sys2/Config_Btn_Voice_01.png /Plugins/lvui/sys2/Config_Btn_Voice_02.png /Plugins/lvui/sys2/Config_Btn_Voice_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+~button syscheader_btn3 680 10 705 jump /Plugins/lvui/_system/config-voice.txt config_in
+~touchableRes /Plugins/lvui/sys2/Config_Btn_Info_01.png /Plugins/lvui/sys2/Config_Btn_Info_02.png /Plugins/lvui/sys2/Config_Btn_Info_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+~button syscheader_btn4 759 10 705 jump /Plugins/lvui/_system/config-info.txt config_in
+
+cg0 sysc_config_sysc_frame /Plugins/lvui/sys2/Config_Sound_Frame.png 79 141 704
+
+//---------------------------------------------------------------
+// voice play types
+
+touchableRes /Plugins/lvui/sys2/Config_Sound_Btn_PlayFull_01.png /Plugins/lvui/sys2/Config_Sound_Btn_PlayFull_02.png /Plugins/lvui/sys2/Config_Sound_Btn_PlayFull_03.png /Plugins/lvui/res/se_maoudamashii_system47.ogg /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/sys2/Config_Sound_Btn_PlayFull_Selected.png
+button0 sysc_btn_voiceMode0 236 157 705 voicePlayType 1
+highlight_if sysc_btn_voiceMode0 "vn_sysVoicePlayType == 1"
+
+touchableRes /Plugins/lvui/sys2/Config_Sound_Btn_PlaySkip_01.png /Plugins/lvui/sys2/Config_Sound_Btn_PlaySkip_02.png /Plugins/lvui/sys2/Config_Sound_Btn_PlaySkip_03.png /Plugins/lvui/res/se_maoudamashii_system47.ogg /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/sys2/Config_Sound_Btn_PlaySkip_Selected.png
+button0 sysc_btn_voiceMode1 709 157 705 voicePlayType 0
+highlight_if sysc_btn_voiceMode1 "vn_sysVoicePlayType == 0"
+
+//---------------------------------------------------------------
+// other settings
+
+touchableRes /Plugins/lvui/sys2/Config_Common_Scroll_Btn_01.png /Plugins/lvui/sys2/Config_Common_Scroll_Btn_02.png /Plugins/lvui/sys2/Config_Common_Scroll_Btn_03.png /Plugins/lvui/res/se_maoudamashii_system47.ogg
+~trackbar0 sysc_tr_mVol 317 334 707 horizontal 770 vn_sysMasterVolume 0 100
+~trackbar0 sysc_tr_Bgm 317 403 707 horizontal 770 vn_sysBgmVolume 0 100
+
+// we add test files that run when trackbar changes
+~trackbar0 sysc_tr_Sfx 317 472 707 horizontal 770 vn_sysSfxVolume 0 100 soundEffect sysc_sound_test /Plugins/lvui/res/airplane+fas+t2.ogg
+~trackbar0 sysc_tr_Voice 317 541 707 horizontal 770 vn_sysVoiceVolume 0 100 voice sysc_voice_test /Plugins/lvui/res/dog-howling-yapping-daniel_simon.ogg バックログ登録禁止
+
+.fadein sysc_.* 0
+
+~keyDown r.click jump config_out
+
+// prevent script from reading past this line
+// (due to ex. command: continueRead)
+wait preventContinueRead
+
+///////////////////////////////////////////////////////////////
+bookmark config_out
+{
+    script /Plugins/lvui/_system/config-pages.txt config_out
+
+    screenSpaceFin my_config_sound
+}
+script_fin
+
+

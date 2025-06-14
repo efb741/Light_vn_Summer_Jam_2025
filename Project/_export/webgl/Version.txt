@@ -1,0 +1,1 @@
+#define SECORE_BUILD_VERSION "16.7.1"

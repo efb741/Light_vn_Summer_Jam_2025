@@ -1,0 +1,30 @@
+
+//------------------------------------------------------------
+
+bookmark config_change
+{
+    keyDown r.click
+
+    // fadeout all objects starting [sysc_] on same level screenspaces
+    // (recall we overwrite screenspaces for all config pages)
+    .fadeout sysc_.* 300 sameLevelScreenSpaces
+}
+script_fin
+
+//------------------------------------------------------------
+
+bookmark config_out
+{
+    keyDown r.click
+
+    // fadeout all objects starting [sysc_] on same level screenspaces
+    // (recall we overwrite screenspaces for all config pages)
+    .fadeout sysc_.* 300 sameLevelScreenSpaces
+    .fadeout all 300 sameLevelScreenSpaces
+    
+    saveSystemVars
+}
+script_fin
+
+//------------------------------------------------------------
+

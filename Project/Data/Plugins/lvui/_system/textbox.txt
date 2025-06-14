@@ -1,0 +1,332 @@
+
+//-------------------------------------------------------------------------------
+// 「system/macros.txt」contains macros to 
+// simplify summoning the textboxes created here
+//-------------------------------------------------------------------------------
+
+// summon method:
+// ex. script /Plugins/lvui/_system/textbox.txt default
+
+clearRGB 255 255 255
+
+~//---------------------------------------------------------------
+~//---------------------------------------------------------------
+
+bookmark cache
+{
+    // cache font as we use the textbox repeatedly
+    preLoad /Plugins/lvui/res/NotoSansCJKjp-Regular.otf forever
+    animationEx sys_wait_icon 1 /Plugins/lvui/sys2/Cursor_%02d.png 1 24 1 24 1 30
+}
+script_fin
+
+~//---------------------------------------------------------------
+~//---------------------------------------------------------------
+clear // this is just to make sure realtime preview only displays starting here.
+
+bookmark default
+{
+    script /Plugins/lvui/_system/textbox.txt cache
+
+    // textbox settings
+    textbox0 txtbox 292 573 100 824 150 /Plugins/lvui/res/NotoSansCJKjp-Regular.otf 22 on_camera
+    useTextbox txtbox
+    textBold false
+    textShadow 0 // 1 2 0 0 0 200
+    textLineSize 33
+    textWordWrap false
+    textboxSkin /Plugins/lvui/sys2/Chat_Frame.png -273 -42
+    textDir horizontal
+    textColour #000000
+    textFlowEffect 8
+    //textAutoWait 0
+    textReadAlpha 125 100
+    
+    // create blinking animation for the text wait icon
+    animationEx sys_wait_icon 1 /Plugins/lvui/sys2/Cursor_%02d.png 1 24 1 24 1 30
+    textWaitIcon 0 sys_wait_icon 10 7
+    
+    zoom txtbox 105% 105%
+    zoom txtbox 100% 200
+    .fadein txtbox 300
+    
+    // button settings
+    textReadVersion 0
+    
+    touchableRes /Plugins/lvui/sys2/Chat_Btn_Skip_01.png /Plugins/lvui/sys2/Chat_Btn_Skip_02.png /Plugins/lvui/sys2/Chat_Btn_Skip_03.png /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/res/se_maoudamashii_system47.ogg
+    button0 txtbox_btn_tSkip 845 684 101 on_camera script /Plugins/lvui/_system/textbox.txt txt_skipToggle
+    highlight_if txtbox_btn_tSkip "vn_sysTextSkipOn == true"
+    
+    touchableRes /Plugins/lvui/sys2/Chat_Btn_Auto_01.png /Plugins/lvui/sys2/Chat_Btn_Auto_02.png /Plugins/lvui/sys2/Chat_Btn_Auto_03.png /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/res/se_maoudamashii_system47.ogg
+    button0 txtbox_btn_tAuto 902 684 101 on_camera script /Plugins/lvui/_system/textbox.txt txt_autoToggle
+    highlight_if txtbox_btn_tAuto "vn_sysTextAutoOn == true"
+    
+    touchableRes /Plugins/lvui/sys2/Chat_Btn_Replay_01.png /Plugins/lvui/sys2/Chat_Btn_Replay_02.png /Plugins/lvui/sys2/Chat_Btn_Replay_03.png /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/res/se_maoudamashii_system47.ogg
+    button0 txtbox_btn_tReplay 959 684 101 on_camera voiceReplay
+    
+    touchableRes /Plugins/lvui/sys2/Chat_Btn_Log_01.png /Plugins/lvui/sys2/Chat_Btn_Log_02.png /Plugins/lvui/sys2/Chat_Btn_Log_03.png /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/res/se_maoudamashii_system47.ogg
+    button0 txtbox_btn_tBacklog 1130 684 101 on_camera script /Plugins/lvui/_system/backlog.txt log_display
+    
+    if (g_scene_replay == true) jump default_fin
+    
+    touchableRes /Plugins/lvui/sys2/Chat_Btn_Qsave_01.png /Plugins/lvui/sys2/Chat_Btn_Qsave_02.png /Plugins/lvui/sys2/Chat_Btn_Qsave_03.png /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/res/se_maoudamashii_system47.ogg
+    button0 txtbox_btn_tqSave 1016 684 101 on_camera quickSave 245 130
+    
+    touchableRes /Plugins/lvui/sys2/Chat_Btn_Qload_01.png /Plugins/lvui/sys2/Chat_Btn_Qload_02.png /Plugins/lvui/sys2/Chat_Btn_Qload_03.png /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/res/se_maoudamashii_system47.ogg
+    button0 txtbox_btn_tqLoad 1073 684 101 on_camera script /Plugins/lvui/_system/textbox.txt run_quickload
+    
+    touchableRes /Plugins/lvui/sys2/Chat_Btn_Menu_01.png /Plugins/lvui/sys2/Chat_Btn_Menu_02.png /Plugins/lvui/sys2/Chat_Btn_Menu_03.png /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/res/se_maoudamashii_system47.ogg
+    button0 txtbox_btn_tMenu 1187 684 101 on_camera script /Plugins/lvui/_system/menu.txt menu_show
+    
+    bookmark default_fin
+    
+    .fadein txtbox_btn.* 0
+    
+    // key bindings
+    script /Plugins/lvui/_system/textbox.txt txt_setToggles
+    script /Plugins/lvui/_system/textbox.txt name_none
+}
+script_fin
+
+~//---------------------------------------------------------------
+~//---------------------------------------------------------------
+clear // this is just to make sure realtime preview only displays starting here.
+
+bookmark large
+{
+    script /Plugins/lvui/_system/textbox.txt cache
+
+    // textbox settings
+    textbox0 txtbox 200 160 90 824 500 /Plugins/lvui/res/NotoSansCJKjp-Regular.otf 28 on_camera
+    useTextbox txtbox
+    textboxSkin /Plugins/lvui/sys2/Chat_Frame_Full.png -200 -160
+    alpha txtbox_skin 180
+    textDir horizontal
+    textColour txtbox 254 254 254
+    textShadow txtbox 0
+    textLineSize 33
+    textWordWrap false
+    textFlowEffect 8
+    //textAutoWait 0
+    textReadAlpha 125 100
+    
+    // create blinking animation for the text wait icon
+    animationEx sys_wait_icon 1 /Plugins/lvui/sys2/Cursor_%02d.png 1 24 1 24 1 30
+    textWaitIcon 0 sys_wait_icon 20 3
+    
+    .fadein txtbox 300
+    
+    // button settings
+    touchableRes /Plugins/lvui/sys2/Chat_Btn_Skip_01.png /Plugins/lvui/sys2/Chat_Btn_Skip_02.png /Plugins/lvui/sys2/Chat_Btn_Skip_03.png /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/res/se_maoudamashii_system47.ogg
+    button txtbox_btn_tSkip 845 684 101 on_camera script /Plugins/lvui/_system/textbox.txt txt_skipToggle
+    highlight_if txtbox_btn_tSkip "vn_sysTextReadMethod == 2"
+    
+    touchableRes /Plugins/lvui/sys2/Chat_Btn_Auto_01.png /Plugins/lvui/sys2/Chat_Btn_Auto_02.png /Plugins/lvui/sys2/Chat_Btn_Auto_03.png /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/res/se_maoudamashii_system47.ogg
+    button txtbox_btn_tAuto 902 684 101 on_camera script /Plugins/lvui/_system/textbox.txt txt_autoToggle
+    highlight_if txtbox_btn_tAuto "vn_sysTextReadMethod == 1"
+    
+    touchableRes /Plugins/lvui/sys2/Chat_Btn_Replay_01.png /Plugins/lvui/sys2/Chat_Btn_Replay_02.png /Plugins/lvui/sys2/Chat_Btn_Replay_03.png /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/res/se_maoudamashii_system47.ogg
+    button txtbox_btn_tReplay 959 684 101 on_camera voiceReplay
+    
+    touchableRes /Plugins/lvui/sys2/Chat_Btn_Qsave_01.png /Plugins/lvui/sys2/Chat_Btn_Qsave_02.png /Plugins/lvui/sys2/Chat_Btn_Qsave_03.png /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/res/se_maoudamashii_system47.ogg
+    button txtbox_btn_tqSave 1016 684 101 on_camera quickSave 245 130
+    
+    touchableRes /Plugins/lvui/sys2/Chat_Btn_Qload_01.png /Plugins/lvui/sys2/Chat_Btn_Qload_02.png /Plugins/lvui/sys2/Chat_Btn_Qload_03.png /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/res/se_maoudamashii_system47.ogg
+    button txtbox_btn_tqLoad 1073 684 101 on_camera script /Plugins/lvui/_system/textbox.txt run_quickload
+    
+    touchableRes /Plugins/lvui/sys2/Chat_Btn_Log_01.png /Plugins/lvui/sys2/Chat_Btn_Log_02.png /Plugins/lvui/sys2/Chat_Btn_Log_03.png /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/res/se_maoudamashii_system47.ogg
+    button txtbox_btn_tBacklog 1130 684 101 on_camera script /Plugins/lvui/_system/backlog.txt log_display
+    
+    touchableRes /Plugins/lvui/sys2/Chat_Btn_Menu_01.png /Plugins/lvui/sys2/Chat_Btn_Menu_02.png /Plugins/lvui/sys2/Chat_Btn_Menu_03.png /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/res/se_maoudamashii_system47.ogg
+    button txtbox_btn_tMenu 1187 684 101 on_camera script /Plugins/lvui/_system/menu.txt menu_show
+    
+    // key bindings
+    script /Plugins/lvui/_system/textbox.txt txt_setToggles
+    script /Plugins/lvui/_system/textbox.txt name_none
+}
+script_fin
+
+~//---------------------------------------------------------------
+bookmark run_quickload
+{
+    quickLoad
+}
+script_fin
+
+~//---------------------------------------------------------------
+bookmark txt_skipToggle // toggle skip mode
+{
+    if (vn_sysTextSkipOn == true) textReadSkip false else textReadSkip true
+}
+script_fin
+
+bookmark txt_autoToggle // toggle auto mode
+{
+    if (vn_sysTextAutoOn == true) textReadAuto false else textReadAuto true
+}
+script_fin
+
+~//---------------------------------------------------------------
+bookmark txt_visibleToggle
+{
+    if (textbox_show != 0) jump txt_hide
+
+    bookmark txt_show
+   {
+       // set alpha of all objects with name starting [txtbox] to 255 (opaque)
+        alpha txtbox.* 255 200 allScreenSpaces
+        
+        // set alpha of all objects with name starting [jump] to 255 (opaque)
+        // (this is pretty much only for the choice buttons in start0.txt)
+        alpha jump.* 255 300 allScreenSpaces
+        
+        // setup variable to track current visibility
+        temp_globalvar textbox_show = 1
+   }    
+    script_fin
+    
+    bookmark txt_hide
+    {
+        // set alpha of all objects with name starting [txtbox] to 0 (transparent)
+        alpha txtbox.* 0 200 allScreenSpaces
+        
+        // set alpha of all objects with name starting [jump] to 0 (transparent)
+        // (this is pretty much only for the choice buttons in start0.txt)
+        alpha jump.* 0 200 allScreenSpaces
+        
+        // setup variable to track current visibility
+        temp_globalvar textbox_show = 0
+    }    
+}
+script_fin
+
+~//---------------------------------------------------------------
+~//---------------------------------------------------------------
+bookmark txt_clearToggles
+{
+    keyDown ctrl.l
+    keyDown ctrl.r
+    keyDown space
+}
+script_fin
+
+~//---------------------------------------------------------------
+~//---------------------------------------------------------------
+bookmark txt_setToggles
+{
+    // key bindings: skip
+    keyDown ctrl.l script /Plugins/lvui/_system/textbox.txt txt_skipToggle
+    keyDown ctrl.r script /Plugins/lvui/_system/textbox.txt txt_skipToggle
+    
+    // key binding: visiblity
+    keyDown space script /Plugins/lvui/_system/textbox.txt txt_visibleToggle
+    
+    script /Plugins/lvui/_system/keys.txt keybind_continueRead
+    
+    // key binding: screenshot
+    keyDown f10 screenshot
+}
+script_fin
+
+~//---------------------------------------------------------------
+~//---------------------------------------------------------------
+~// set key bindings, excluding l.click 
+bookmark txt_setToggles_except_lclick
+{
+    // key bindings: skip
+    keyDown ctrl.l script /Plugins/lvui/_system/textbox.txt txt_skipToggle
+    keyDown ctrl.r script /Plugins/lvui/_system/textbox.txt txt_skipToggle
+    
+    // key binding: visiblity
+    keyDown space script /Plugins/lvui/_system/textbox.txt txt_visibleToggle
+    
+    //key binding: continueRead
+    keyDown wheel.down continueRead
+    keyDown enter continueRead
+    
+    // key binding: screenshot
+    keyDown f10 screenshot
+}
+script_fin
+
+~//---------------------------------------------------------------
+~//---------------------------------------------------------------
+clear // this is just to make sure realtime preview only displays starting here.
+
+bookmark vertical
+{
+    textbox0 txtbox 60 80 80 1154 400 /Plugins/lvui/res/NotoSansCJKjp-Regular.otf 28 on_camera
+    useTextbox txtbox
+    textBold false
+    textShadow 1 2 #000000aa
+    textWordWrap false
+    //textAutoWait 0
+    textboxSkin none
+    textDir vertical
+    
+    fadein txtbox 300
+    
+    // create blinking animation for the text wait icon
+    animationEx sys_wait_icon 1 /Plugins/lvui/sys2/Cursor_%02d.png 1 24 1 24 1 30
+    textWaitIcon 0 sys_wait_icon 1 13
+    
+    // key bindings
+    script /Plugins/lvui/_system/textbox.txt txt_setToggles
+}
+script_fin
+
+~//---------------------------------------------------------------
+~//---------------------------------------------------------------
+clear // this is just to make sure realtime preview only displays starting here.
+
+bookmark name _name
+{
+    textClear
+    if (cur_name == undefined) datavar cur_name = ""
+    if (prev_name == undefined) datavar prev_name = ""
+    
+    if (_name == "") ~jump name_none
+    if (_name == prev_name) script_fin
+    
+    datavar cur_name = _name
+    backlogCurSpeaker "--------------------------------------------------------------------------------------------------------------------------------------------------\n\n{{_name}}\n"
+    
+    bookmark name_new
+    {
+        ~text0 txtbox_name_str 240 543 101 /Plugins/lvui/res/NotoSansCJKjp-Regular.otf 30 middle on_camera "{{cur_name}}"
+        ~textColour txtbox_name_str 254 254 254
+        ~textShadow txtbox_name_str 0
+        ~cg0 txtbox_name_img /Plugins/lvui/sys2/Chat_Frame_Name.png 112 510 100 on_camera
+        ~move2 txtbox_name_str, txtbox_name_img 60 0 300 a3
+        fadein txtbox_name_str, txtbox_name_img 300
+        
+        datavar prev_name = cur_name
+    }    
+    script_fin
+    
+    bookmark name_none
+    {
+        fadeout txtbox_name_.*
+        datavar vn_backlogName = ""
+        datavar cur_name = ""
+        datavar prev_name = cur_name
+        backlogCurSpeaker "--------------------------------------------------------------------------------------------------------------------------------------------------\n\n"
+    }
+}
+script_fin
+
+~//---------------------------------------------------------------
+~//---------------------------------------------------------------
+clear // this is just to make sure realtime preview only displays starting here.
+
+bookmark tut_title _title  // set top right tutorial title label
+{
+    ~text0 script_str 1170 19 81 /Plugins/lvui/res/NotoSansCJKjp-Regular.otf 24 middle on_camera "{{_title}}"
+    ~textColour script_str 254 254 254
+    ~textShadow script_str 0
+    
+    cg0 script_str_bg /Plugins/lvui/sys2/Chat_Frame_Name.png 1047 -15 80 on_camera
+    ~.fadein script_str.* 300
+}
+script_fin
+

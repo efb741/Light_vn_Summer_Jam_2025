@@ -1,0 +1,87 @@
+
+bookmark msg_in
+
+screenSpaceStart my_message
+
+// s.t. visual effects run at normal speed
+textReadNormalForce true
+
+autoOnCamera true
+
+cg0 sysmsgbox /Plugins/lvui/_dialog/Common_PopupBg.png 0 0 854 | .fadein sysmsgbox 300
+
+cg0 sysmsgbox_ribbon /Plugins/lvui/_dialog/Popup_Frame.png 0 327 855 | .fadein sysmsgbox_ribbon 300
+
+//------------------------------------------------------
+bookmark msg_buttons
+
+// vn_msg_str: passed by the system. it's the message string from command: [dialog]
+text0 sysmsg_Str 640 359 857 /Plugins/lvui/res/NotoSansCJKjp-Regular.otf 24 middle "{{vn_msg_str}}"
+textColour sysmsg_Str 254 254 254
+
+touchableRes /Plugins/lvui/_dialog/Popup_Btn_Ok_01.png /Plugins/lvui/_dialog/Popup_Btn_Ok_02.png /Plugins/lvui/_dialog/Popup_Btn_Ok_03.png /Plugins/lvui/res/se_maoudamashii_system29.ogg /Plugins/lvui/res/se_maoudamashii_onepoint23.ogg
+~button0 sysmsg_btn_yes 1014 304 856 jump msg_out_result_yes
+
+touchableRes /Plugins/lvui/_dialog/Popup_Btn_Cancel_01.png /Plugins/lvui/_dialog/Popup_Btn_Cancel_02.png /Plugins/lvui/_dialog/Popup_Btn_Cancel_03.png /Plugins/lvui/res/se_maoudamashii_system29.ogg /Plugins/lvui/res/se_maoudamashii_onepoint22.ogg
+~button0 sysmsg_btn_no 1130 304 856 jump msg_out_result_no
+
+// move cursor to the button 
+// only works on Windows
+move vn_mousecursor 1070 350 100 allScreenSpaces
+
+// entrace effect
+zoom sysmsg_.* 90%
+fadein sysmsg_.* 150
+.zoom sysmsg_.* 100% 150 a1
+
+// wait for button click for any buttons starting with name: [msg_btn]
+wait buttonSelect msg_btn
+
+//--------------------------------------------------------
+// message select results
+//--------------------------------------------------------
+bookmark msg_out_result_no
+{
+    fadeout sysmsg_.*
+
+    // fadeout all objects in this screenspace
+    .fadeout all 300
+    
+    // menu_displaying: from /Plugins/lvui/_system/menu.txt
+    if (menu_displaying != true) jump msg_out_result_no_continue
+    .alpha menu.* 255 300 allScreenSpaces
+    
+    bookmark msg_out_result_no_continue
+    
+    textReadNormalForce false
+    
+    screenSpaceFin my_message
+    
+    dialogResult no
+}
+script_fin
+
+//--------------------------------------------------------
+bookmark msg_out_result_yes
+{
+    .fadeout sysmsg_.* 150
+
+    // fadeout all objects in this screenspace
+    .fadeout all 300
+    
+    // menu_displaying: from /Plugins/lvui/_system/menu.txt
+    if (menu_displaying != true) jump msg_out_result_yes_continue
+    .alpha menu.* 255 300 allScreenSpaces
+    
+    bookmark msg_out_result_yes_continue
+    
+    textReadNormalForce false
+    
+    screenSpaceFin my_message
+    
+    // execute dialog command
+    dialogResult yes
+}
+script_fin
+
+

@@ -1,0 +1,101 @@
+
+//---------------------------------------------------------------
+// Case: when the Config screen first comes up
+
+bookmark config_in_first
+
+// freeOnReturnToMain: we want this screenspace to auto release on load.
+// tied to /Plugins/lvui/_system/events.txt [script_fin_return_to_main]
+screenSpaceStart my_config freeOnReturnToMain
+
+script /Plugins/lvui/_system/config-pages.txt config_change
+cg0 syscheader_config /Plugins/lvui/sys2/Common_PopupBg2.png 0 0 703 on_camera
+.fadein syscheader_config 300
+
+//---------------------------------------------------------------
+// Case: when coming from another Config page
+
+bookmark config_in
+
+screenSpaceOverwrite my_config_text
+
+script /Plugins/lvui/_system/config-pages.txt config_change
+
+cg syscheader_config /Plugins/lvui/sys2/Common_PopupBg2.png 0 0 703 on_camera
+jump config_btns
+
+bookmark config_in_change
+
+//---------------------------------------------------------------
+// screen header + background
+
+bookmark config_btns
+
+autoOnCamera true
+
+cg syscheader_config_title /Plugins/lvui/sys2/Config_Title.png 966 23 704
+
+touchableRes /Plugins/lvui/sys2/Common_Btn_Exit_01.png /Plugins/lvui/sys2/Common_Btn_Exit_02.png /Plugins/lvui/sys2/Common_Btn_Exit_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system46.ogg
+button syscheader_close 1201 10 705 jump config_out
+
+~touchableRes /Plugins/lvui/sys2/Config_Btn_System_01.png /Plugins/lvui/sys2/Config_Btn_System_02.png /Plugins/lvui/sys2/Config_Btn_System_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+~if (!lvSystem::IsFixedWindowSize()) button syscheader_btn0 447 10 705 jump /Plugins/lvui/_system/config-system.txt config_in
+~touchableRes /Plugins/lvui/sys2/Config_Btn_Text_Selected.png /Plugins/lvui/sys2/Config_Btn_Text_Selected.png /Plugins/lvui/sys2/Config_Btn_Text_Selected.png
+~button syscheader_btn1 526 10 705
+~touchableRes /Plugins/lvui/sys2/Config_Btn_Sound_01.png /Plugins/lvui/sys2/Config_Btn_Sound_02.png /Plugins/lvui/sys2/Config_Btn_Sound_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+~button syscheader_btn2 603 10 705 jump /Plugins/lvui/_system/config-sound.txt config_in
+~touchableRes /Plugins/lvui/sys2/Config_Btn_Voice_01.png /Plugins/lvui/sys2/Config_Btn_Voice_02.png /Plugins/lvui/sys2/Config_Btn_Voice_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+~button syscheader_btn3 680 10 705 jump /Plugins/lvui/_system/config-voice.txt config_in
+~touchableRes /Plugins/lvui/sys2/Config_Btn_Info_01.png /Plugins/lvui/sys2/Config_Btn_Info_02.png /Plugins/lvui/sys2/Config_Btn_Info_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system29.ogg
+~button syscheader_btn4 759 10 705 jump /Plugins/lvui/_system/config-info.txt config_in
+
+cg0 sysc_config_sys_frame /Plugins/lvui/sys2/Config_Text_Frame.png 79 141 704
+
+//---------------------------------------------------------------
+// Skip Mode
+
+touchableRes /Plugins/lvui/sys2/Config_System_Btn_SkipAll_01.png /Plugins/lvui/sys2/Config_System_Btn_SkipAll_02.png /Plugins/lvui/sys2/Config_System_Btn_SkipAll_03.png /Plugins/lvui/res/se_maoudamashii_system47.ogg /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/sys2/Config_System_Btn_SkipAll_Selected.png
+button0 sysc_btn_skip0 236 157 705 textSkipMode 0
+highlight_if sysc_btn_skip0 "vn_sysTextSkipMethod == 0"
+
+touchableRes /Plugins/lvui/sys2/Config_System_Btn_SkipRead_01.png /Plugins/lvui/sys2/Config_System_Btn_SkipRead_02.png /Plugins/lvui/sys2/Config_System_Btn_SkipRead_03.png /Plugins/lvui/res/se_maoudamashii_system47.ogg /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/sys2/Config_System_Btn_SkipRead_Selected.png
+button0 sysc_btn_skip1 709 157 705 textSkipMode 1
+highlight_if sysc_btn_skip1 "vn_sysTextSkipMethod == 1"
+
+//---------------------------------------------------------------
+// Other settings
+
+touchableRes /Plugins/lvui/sys2/Config_Common_Scroll_Btn_01.png /Plugins/lvui/sys2/Config_Common_Scroll_Btn_02.png /Plugins/lvui/sys2/Config_Common_Scroll_Btn_03.png /Plugins/lvui/res/se_maoudamashii_system47.ogg
+~trackbar0 sysc_tr_TextS 317 335 707 horizontal 770 vn_sysTextSpeed 300 0
+~trackbar0 sysc_tr_AutoS 317 400 707 horizontal 770 vn_sysAutoSpeed 300 0
+~trackbar0 sysc_tr_AutoW 317 469 707 horizontal 770 vn_sysAutoWait 5000 0
+
+~text0 sysc_text 260 546 707 /Plugins/lvui/res/NotoSansCJKjp-Regular.otf 24 "This displays according to Text Speed"
+~text0 sysc_text_auto 260 596 707 /Plugins/lvui/res/NotoSansCJKjp-Regular.otf 24 "This displays according to Auto Speed"
+textColour sysc_text.* 0 0 0
+textShadow sysc_text.* 0
+
+.fadein sysc_.* 0
+
+textSpeed sysc_text followSystem
+textSpeed sysc_text_auto followSystemAuto
+textRepeat sysc_text.* true
+
+~keyDown r.click jump config_out
+
+// prevent script from reading past this line
+// (due to ex. command: continueRead)
+wait preventContinueRead
+
+//---------------------------------------------------------------
+// Case: leaving the Config screen
+
+bookmark config_out
+{
+    script /Plugins/lvui/_system/config-pages.txt config_out
+
+    screenSpaceFin my_config_text
+}
+script_fin
+
+

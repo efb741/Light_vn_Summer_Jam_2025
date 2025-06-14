@@ -1,0 +1,12 @@
+
+bookmark keybind_continueRead
+{
+    // key bindings
+    keyDown wheel.down continueRead
+    keyDown l.click continueRead
+    keyDown enter continueRead
+    
+    // rollback
+    keyDown q rollback
+}
+script_fin

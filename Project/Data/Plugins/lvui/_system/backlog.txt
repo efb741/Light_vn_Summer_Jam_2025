@@ -1,0 +1,96 @@
+
+bookmark log_init
+{
+    // freeOnReturnToMain: we want this screenspace to auto release on load.
+    // tied to /Plugins/lvui/_system/events.txt [script_fin_return_to_main]
+    screenSpaceStart my_backlog freeOnReturnToMain
+    
+    // setup backlog text area
+    // note: thus the text in the backlog is bound to the laye(r) set in the textbox here.
+    // (thus setting to relatively high number: 300, to come above scene objects)
+    textbox backlog_textbox 200 80 301 900 550 /Plugins/lvui/res/NotoSansCJKjp-Regular.otf 20 on_camera
+    useTextbox backlog_textbox
+    textColour 0 0 0 // 255 255 255
+    textShadow 0
+    textWordWrap false
+    
+    // setup resources for voice buttons in backlog
+    touchableRes /Plugins/lvui/sys2/Backlog_Btn_Sound_01.png /Plugins/lvui/sys2/Backlog_Btn_Sound_02.png /Plugins/lvui/sys2/Backlog_Btn_Sound_03.png /Plugins/lvui/res/se_maoudamashii_system48.ogg /Plugins/lvui/res/se_maoudamashii_system47.ogg
+    
+    // backlog settings
+    backlogConfig backlog_textbox
+    backlogAddLines true
+    backlogNewPagePrefix "\n\n"
+    backlogVoiceOffset -10 0
+    
+    screenSpaceFin my_backlog
+    
+    // key bindings
+    keyDown wheel.up script /Plugins/lvui/_system/backlog.txt log_display
+}
+script_fin
+
+~//---------------------------------------------------------------
+bookmark log_display
+{
+    // if backlog not configured, do it now
+    if (!lvExistsObj("backlog_textbox")) スクリプト current log_init
+    
+    screenSpaceStart my_backlog
+    
+    // pauseLowerScripts: need to do this if 
+    // parallel scripts are running in lower parts of the script stack
+    var need_to_pause_lower_scripts = (!lvSystem::IsPausingLowerScripts())
+    if (need_to_pause_lower_scripts) pauseLowerScripts true
+    
+    // force visual effects to execute at normal designated times
+    textReadNormalForce true
+    
+    // note: the laye(r) values are adjusted to come above most scene objects
+    cg0 backlog_main_bg /Plugins/lvui/sys2/Common_PopupBg.png 0 0 250 on_camera
+    cg0 backlog_main_title /Plugins/lvui/sys2/Backlog_Title.png 966 23 270 on_camera
+    
+    touchableRes /Plugins/lvui/sys2/Common_Btn_Exit_01.png /Plugins/lvui/sys2/Common_Btn_Exit_02.png /Plugins/lvui/sys2/Common_Btn_Exit_03.png /Plugins/lvui/res/se_maoudamashii_system13.ogg /Plugins/lvui/res/se_maoudamashii_system46.ogg
+    button0 backlog_main_btn_close 1201 10 280 on_camera jump log_out
+    
+    .fadein backlog_main.* 300
+    fadein backlog // start backlog functionality
+    
+    ~cg0 backlog_main_scroll /Plugins/lvui/sys2/Backlog_Scroll_Frame.png 1235 234 300 on_camera
+    touchableRes /Plugins/lvui/sys2/Backlog_Scroll_Btn_01.png /Plugins/lvui/sys2/Backlog_Scroll_Btn_02.png /Plugins/lvui/sys2/Backlog_Scroll_Btn_03.png /Plugins/lvui/res/se_maoudamashii_system47.ogg
+    ~trackbar0 backlog_main_scrollball 1237 226 301 vertical 265 vn_backlog_pos 0 100 on_camera
+    
+    .fadein backlog_textbox, backlog_main_scroll.* 300
+    
+    // key bindings
+    keyDown r.click jump log_out
+    
+    keyDown wheel.up backlog_scroll -1
+    keyDown wheel.down backlog_scroll 1
+}
+// prevent script from reading past this line
+// (due to ex. command: continueRead)
+wait preventContinueRead
+
+~//---------------------------------------------------------------
+bookmark log_out
+{
+    // fadeout backlog objects
+    alpha backlog_textbox 0 300
+    .fadeout backlog_main.* 300
+    fadeout backlog
+    
+    // key bindings
+    keyDown wheel.up script /Plugins/lvui/_system/backlog.txt log_display
+    keyDown r.click script /Plugins/lvui/_system/menu.txt menu_show
+    script /Plugins/lvui/_system/textbox.txt txt_setToggles
+    
+    textReadNormalForce false
+    
+    if (need_to_pause_lower_scripts) pauseLowerScripts false
+    
+    screenSpaceFin my_backlog
+}
+script_fin
+
+

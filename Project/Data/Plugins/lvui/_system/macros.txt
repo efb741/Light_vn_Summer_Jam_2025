@@ -1,0 +1,10 @@
+
+// effective macro usage:
+// use [commandMacro] when possible.
+// if you need to use regex, then 
+// use [macro] with the target and replacement both having [~] at front
+
+~macro "~【(.*)】" "~script /Plugins/lvui/_system/textbox.txt name \"$1\""
+~commandMacro textbox_bottom "script /Plugins/lvui/_system/textbox.txt default"
+~commandMacro textbox_vertical "script /Plugins/lvui/_system/textbox.txt vertical"
+
