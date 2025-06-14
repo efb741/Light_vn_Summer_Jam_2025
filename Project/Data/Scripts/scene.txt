@@ -7,3 +7,6 @@ script /Plugins/lvui/_system/macros.txt // macros
 "This is my project!
 
 ~cg0 id1 Extra_Ending_Slot_01.png 310 125 80 | zoom id1 100% | .fadein id1 300
+
+//Nonogram initialization
+script /Scripts/nonogram.txt gridInit

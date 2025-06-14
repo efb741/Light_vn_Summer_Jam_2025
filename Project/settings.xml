@@ -36,16 +36,16 @@
 			<value type="4" literal="" number="4500" />
 		</vnvar>
 		<vnvar name="vn_sysTextSkipOn" range="4" created_at="">
-			<value type="47" literal="false" number="1.5342029568678919e-311" />
+			<value type="47" literal="false" number="1.2965394282797814e-311" />
 		</vnvar>
 		<vnvar name="vn_sysTextReadVersion" range="4" created_at="">
 			<value type="4" literal="" number="0" />
 		</vnvar>
 		<vnvar name="vn_sysTextAutoOn" range="4" created_at="">
-			<value type="47" literal="false" number="1.5342029568678919e-311" />
+			<value type="47" literal="false" number="1.2965394282797814e-311" />
 		</vnvar>
 		<vnvar name="vn_sysTextNormalForce" range="4" created_at="">
-			<value type="47" literal="false" number="1.5342029568678919e-311" />
+			<value type="47" literal="false" number="1.2965394282797814e-311" />
 		</vnvar>
 	</GameSettings>
 </BasketNovel>
