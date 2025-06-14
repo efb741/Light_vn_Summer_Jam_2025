@@ -3,38 +3,103 @@
 //-------------------------------------------------------------------------------
 //GRID INIT
 //-------------------------------------------------------------------------------
-~bookmark gridInit
+~bookmark gridInit {
+    
+    //TO-DO: Change this from hardcode to input so larger grids can be made
+    ~globalvar gridSize = 5
+    
+    //Solution Grid Key:
+    //  - 0: empty
+    //  - 1: filled
+    ~globalvar solutionGrid = lvCreateVarList(gridSize, lvCreateVarList(gridSize, 0))
+    
+    //Player Grid Key:
+    //  - 0: empty
+    //  - 1: filled
+    //  - 2: marked with an X 
+    ~globalvar playerGrid = lvCreateVarList(gridSize, lvCreateVarList(gridSize, 0))
+    
+    //TO-DO: Change this from hard-coding to input so multiple puzzles can be used
+    ~globalvar solutionGrid[0][1] = 1
+    ~globalvar solutionGrid[0][3] = 1
+    
+    ~globalvar solutionGrid[1][0] = 1
+    ~globalvar solutionGrid[1][1] = 1
+    ~globalvar solutionGrid[1][2] = 1
+    ~globalvar solutionGrid[1][3] = 1
+    
+    ~globalvar solutionGrid[2][1] = 1
+    ~globalvar solutionGrid[2][2] = 1
+    ~globalvar solutionGrid[2][3] = 1
+    
+    ~globalvar solutionGrid[3][1] = 1
+    ~globalvar solutionGrid[3][3] = 1
+    
+    ~globalvar solutionGrid[4][1] = 1
+    
+    ~script current createHints
+}
+~script_fin
 
-//TO-DO: Change this from hardcode to input so larger grids can be made
-~var size = 5
+//-------------------------------------------------------------------------------
+//CREATE HINTS (FOR WHOLE GRID)
+//-------------------------------------------------------------------------------
+~bookmark createHints {
+    //Find the max grid size to know how large to make hint arrays
+    ~if (gridSize % 2 == 0) var maxNumHints = gridSize / 2
+    ~else var maxNumHints = (gridSize + 1) / 2
+    
+    ~globalvar rowHints = lvCreateVarList(gridSize, lvCreateVarList(maxNumHints, 0))
+    ~globalvar columnHints = lvCreateVarList(gridSize, lvCreateVarList(maxNumHints, 0))
+    
+    ~forRun 0 (gridSize - 1) "script current createHintsForRow {}"
+    ~forRun 0 (gridSize - 1) "script current createHintsForColumn {}"
+    
+    ~script_fin
+    
+    //CREATE HINTS FOR ROW
+    ~bookmark createHintsForRow _row {
+        ~globalvar consecutiveFilledCount = 0
+        ~globalvar hintsIndex = 0
+    
+        ~forRun 0 (gridSize - 1) "script current createHintsForRowByColumn _row {}"
+        
+        //Add any remaining count
+        ~if (consecutiveFilledCount > 0) globalvar rowHints[_row][hintsIndex] = consecutiveFilledCount
+    }
+    ~script_fin
+    
+    //CREATE HINTS FOR ROW BY COLUMN
+    ~bookmark createHintsForRowByColumn _row _col {
+   ~if (solutionGrid[_row][_col] == 1) globalvar consecutiveFilledCount = consecutiveFilledCount + 1
+   ~elseif (consecutiveFilledCount > 0) globalvar rowHints[_row][hintsIndex] = consecutiveFilledCount | globalvar consecutiveFilledCount = 0 | globalvar hintsIndex = hintsIndex + 1
+    }
+    
+    //CREATE HINTS FOR COLUMN
+    ~bookmark createHintsForColumn _col {
+        ~globalvar consecutiveFilledCount = 0
+        ~globalvar hintsIndex = 0
+    
+        ~forRun 0 (gridSize - 1) "script current createHintsForColumnByRow _col {}"
+        
+        //Add any remaining count
+        ~if (consecutiveFilledCount > 0) globalvar columnHints[_col][hintsIndex] = consecutiveFilledCount
+    }
+    ~script_fin
+    
+    //CREATE HINTS FOR ROW BY COLUMN
+    ~bookmark createHintsForColumnByRow _col _row {
+   ~if (solutionGrid[_row][_col] == 1) globalvar consecutiveFilledCount = consecutiveFilledCount + 1
+   ~elseif (consecutiveFilledCount > 0) globalvar columnHints[_col][hintsIndex] = consecutiveFilledCount | globalvar consecutiveFilledCount = 0 | globalvar hintsIndex = hintsIndex + 1
+    }
+    ~script_fin
+} 
+~script_fin
 
-//Solution Grid Key:
-//  - 0: empty
-//  - 1: filled
-~globalvar solutionGrid = lvCreateVarList(size, lvCreateVarList(size, 0))
-
-//Player Grid Key:
-//  - 0: empty
-//  - 1: filled
-//  - 2: marked with an X 
-~globalvar playerGrid = lvCreateVarList(size, lvCreateVarList(size, 0))
-
-//TO-DO: Change this from hard-coding to input so multiple puzzles can be used
-~globalvar solutionGrid[0][1] = 1
-~globalvar solutionGrid[0][3] = 1
-
-~globalvar solutionGrid[1][0] = 1
-~globalvar solutionGrid[1][1] = 1
-~globalvar solutionGrid[1][2] = 1
-~globalvar solutionGrid[1][3] = 1
-
-~globalvar solutionGrid[2][1] = 1
-~globalvar solutionGrid[2][2] = 1
-~globalvar solutionGrid[2][3] = 1
-
-~globalvar solutionGrid[3][1] = 1
-~globalvar solutionGrid[3][3] = 1
-
-~globalvar solutionGrid[4][1] = 1
-
+//-------------------------------------------------------------------------------
+//DEBUG
+//-------------------------------------------------------------------------------
+~bookmark debug _info {
+        ~SystemLog "Got here! {{_info}}"
+}
 ~script_fin

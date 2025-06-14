@@ -2,9 +2,9 @@
 <ReadTracker />
 <GlobalVars>
 	<vnvar name="solutionGrid" range="3" created_at="/scripts/nonogram.txt:38">
-		<value type="9" literal="LIST" number="0">
+		<value type="9" literal="LIST" number="1.3580773062128336e-312">
 			<list_content>
-				<value type="9" literal="LIST" number="6.8981024386411447e-307">
+				<value type="9" literal="LIST" number="0">
 					<list_content>
 						<value type="4" literal="" number="0" />
 						<value type="4" literal="" number="1" />
@@ -13,7 +13,7 @@
 						<value type="4" literal="" number="0" />
 					</list_content>
 				</value>
-				<value type="9" literal="LIST" number="1.2906087057196776e-306">
+				<value type="9" literal="LIST" number="0">
 					<list_content>
 						<value type="4" literal="" number="1" />
 						<value type="4" literal="" number="1" />
@@ -22,7 +22,7 @@
 						<value type="4" literal="" number="0" />
 					</list_content>
 				</value>
-				<value type="9" literal="LIST" number="6.8981024386411447e-307">
+				<value type="9" literal="LIST" number="4.243991581436479e-314">
 					<list_content>
 						<value type="4" literal="" number="0" />
 						<value type="4" literal="" number="1" />
@@ -31,7 +31,7 @@
 						<value type="4" literal="" number="0" />
 					</list_content>
 				</value>
-				<value type="9" literal="LIST" number="6.397600872471267e-308">
+				<value type="9" literal="LIST" number="2.4360511679648922e-311">
 					<list_content>
 						<value type="4" literal="" number="0" />
 						<value type="4" literal="" number="1" />
@@ -40,7 +40,7 @@
 						<value type="4" literal="" number="0" />
 					</list_content>
 				</value>
-				<value type="9" literal="LIST" number="6.8981024386411447e-307">
+				<value type="9" literal="LIST" number="0">
 					<list_content>
 						<value type="4" literal="" number="0" />
 						<value type="4" literal="" number="1" />
@@ -53,9 +53,9 @@
 		</value>
 	</vnvar>
 	<vnvar name="playerGrid" range="3" created_at="/scripts/nonogram.txt:20">
-		<value type="9" literal="LIST" number="0">
+		<value type="9" literal="LIST" number="1.2387404735861409e-311">
 			<list_content>
-				<value type="9" literal="LIST" number="1.2906087057196596e-306">
+				<value type="9" literal="LIST" number="2.121995791459338e-314">
 					<list_content>
 						<value type="4" literal="" number="0" />
 						<value type="4" literal="" number="0" />
@@ -64,7 +64,7 @@
 						<value type="4" literal="" number="0" />
 					</list_content>
 				</value>
-				<value type="9" literal="LIST" number="1.2970355232943341e-311">
+				<value type="9" literal="LIST" number="2.6737146966162431e-312">
 					<list_content>
 						<value type="4" literal="" number="0" />
 						<value type="4" literal="" number="0" />
@@ -73,7 +73,7 @@
 						<value type="4" literal="" number="0" />
 					</list_content>
 				</value>
-				<value type="9" literal="LIST" number="1.7802220584863451e-306">
+				<value type="9" literal="LIST" number="6.9525262639710579e-310">
 					<list_content>
 						<value type="4" literal="" number="0" />
 						<value type="4" literal="" number="0" />
@@ -82,7 +82,7 @@
 						<value type="4" literal="" number="0" />
 					</list_content>
 				</value>
-				<value type="9" literal="LIST" number="0">
+				<value type="9" literal="LIST" number="6.9525262639710579e-310">
 					<list_content>
 						<value type="4" literal="" number="0" />
 						<value type="4" literal="" number="0" />
@@ -91,7 +91,7 @@
 						<value type="4" literal="" number="0" />
 					</list_content>
 				</value>
-				<value type="9" literal="LIST" number="1.7802220584863451e-306">
+				<value type="9" literal="LIST" number="1.2387153233206827e-311">
 					<list_content>
 						<value type="4" literal="" number="0" />
 						<value type="4" literal="" number="0" />
@@ -102,5 +102,96 @@
 				</value>
 			</list_content>
 		</value>
+	</vnvar>
+	<vnvar name="gridSize" range="3" created_at="/scripts/nonogram.txt:53">
+		<value type="4" literal="" number="5" />
+	</vnvar>
+	<vnvar name="rowHints" range="3" created_at="/scripts/nonogram.txt:73">
+		<value type="9" literal="LIST" number="2.1219957904712067e-314">
+			<list_content>
+				<value type="9" literal="LIST" number="6.9525262639710579e-310">
+					<list_content>
+						<value type="4" literal="" number="5" />
+						<value type="4" literal="" number="0" />
+						<value type="4" literal="" number="0" />
+					</list_content>
+				</value>
+				<value type="9" literal="LIST" number="2.3745132903317378e-311">
+					<list_content>
+						<value type="4" literal="" number="0" />
+						<value type="4" literal="" number="0" />
+						<value type="4" literal="" number="0" />
+					</list_content>
+				</value>
+				<value type="9" literal="LIST" number="1.2387404702818298e-311">
+					<list_content>
+						<value type="4" literal="" number="0" />
+						<value type="4" literal="" number="0" />
+						<value type="4" literal="" number="0" />
+					</list_content>
+				</value>
+				<value type="9" literal="LIST" number="0">
+					<list_content>
+						<value type="4" literal="" number="5" />
+						<value type="4" literal="" number="0" />
+						<value type="4" literal="" number="0" />
+					</list_content>
+				</value>
+				<value type="9" literal="LIST" number="0">
+					<list_content>
+						<value type="4" literal="" number="5" />
+						<value type="4" literal="" number="0" />
+						<value type="4" literal="" number="0" />
+					</list_content>
+				</value>
+			</list_content>
+		</value>
+	</vnvar>
+	<vnvar name="columnHints" range="3" created_at="/scripts/nonogram.txt:90">
+		<value type="9" literal="LIST" number="1.2387153233206827e-311">
+			<list_content>
+				<value type="9" literal="LIST" number="1.2387404704083106e-311">
+					<list_content>
+						<value type="4" literal="" number="1" />
+						<value type="4" literal="" number="0" />
+						<value type="4" literal="" number="0" />
+					</list_content>
+				</value>
+				<value type="9" literal="LIST" number="6.9525262639710579e-310">
+					<list_content>
+						<value type="4" literal="" number="5" />
+						<value type="4" literal="" number="0" />
+						<value type="4" literal="" number="0" />
+					</list_content>
+				</value>
+				<value type="9" literal="LIST" number="0">
+					<list_content>
+						<value type="4" literal="" number="2" />
+						<value type="4" literal="" number="0" />
+						<value type="4" literal="" number="0" />
+					</list_content>
+				</value>
+				<value type="9" literal="LIST" number="0">
+					<list_content>
+						<value type="4" literal="" number="4" />
+						<value type="4" literal="" number="0" />
+						<value type="4" literal="" number="0" />
+					</list_content>
+				</value>
+				<value type="9" literal="LIST" number="8.9010084364266233e-307">
+					<list_content>
+						<value type="4" literal="" number="0" />
+						<value type="4" literal="" number="0" />
+						<value type="4" literal="" number="0" />
+					</list_content>
+				</value>
+			</list_content>
+		</value>
+	</vnvar>
+	<vnvar name="consecutiveFilledCount" range="3" created_at="/scripts/nonogram.txt:80">
+		<value type="4" literal="" number="0" />
+	</vnvar>
+	<vnvar name="hintsIndex" range="3" created_at="/scripts/nonogram.txt:81">
+		<value type="4" literal="" number="0" />
 	</vnvar>
 </GlobalVars>
